@@ -21,15 +21,16 @@ struct plane_t
 	};
 
 };
-
 class brush_t
 {
 public:
 	brush_t(const std::list<vf2d> points);
+
 	~brush_t(){
 		delete[] polygon;
 	};
-
+	bool Triangulate();
+	void DebugDraw();
 	plane_t* polygon;
 	uint8_t faces = 0;
 

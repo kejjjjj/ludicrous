@@ -1,19 +1,7 @@
 
 #include "pch.h"
 
-bool TriangulateBrush(const brush_t& brush, ftriangles_t* triangles)
-{
-	ftris_t triangle;
-	const int32_t possible_triangles = brush.faces - 2;
 
-	for (int32_t i = 0; i < possible_triangles; i++) {
-
-
-
-	}
-
-	return {};
-}
 float normalize(float& a, float& b, float& c, float& d)
 {
 	float length = sqrt(a * a + b * b + c * c + d * d);
@@ -52,14 +40,11 @@ bool PointIsWithinTriangle(const itris_t& tris, const vi2d& p)
 
 
 }
-
+//assumes ABC order from left to right on the screen
 bool TriangleIntersection(const itris_t& a, const itris_t& b)
 {
 
-	//if (PointIsWithinTriangle(a, b.a) || PointIsWithinTriangle(a, b.b) || PointIsWithinTriangle(a, b.c) ||	//b intersects with a
-	//	PointIsWithinTriangle(b, a.a) || PointIsWithinTriangle(b, a.b) || PointIsWithinTriangle(b, a.c)) { 	//a intersects with b
-	//	return true;
-	//}
+
 
 	//offset = 0;
 	//return false;
@@ -67,35 +52,26 @@ bool TriangleIntersection(const itris_t& a, const itris_t& b)
 	//left triangle is hugging right triangle if this is false
 	int matches = 0;
 
-	
-	if (!IsIntersecting(a.b, a.c, b.a, b.b)) {
-		//either hugging or not near
+	//hugging
+	if (a.a == b.a && a.c == b.c)	return false;
 
-		if (IsIntersecting(a.b, a.c, b.a, b.c))
-			matches++;
+	if (a.b == b.a && a.c == b.b)	return false;
 
-		if (IsIntersecting(a.b, a.c, b.b, b.c))
-			matches++;
+	if (a.a == b.b && a.b == b.c)	return false;
 
-		//not hugging, but intersecting
-		if (matches != 0 && a.b != b.a && a.c != b.b)
-			return true;
+	if (PointIsWithinTriangle(a, b.a) || PointIsWithinTriangle(a, b.b) || PointIsWithinTriangle(a, b.c) ||	//b intersects with a
+		PointIsWithinTriangle(b, a.a) || PointIsWithinTriangle(b, a.b) || PointIsWithinTriangle(b, a.c)) { 	//a intersects with b
+		return true;
 	}
-	matches = 0;
 
-	if (!IsIntersecting(a.a, a.c, b.a, b.c)) {
-		//either hugging or not near
+	if (IsIntersecting(a.a, a.b, b.a, b.b))
+		return true;
 
-		if (IsIntersecting(a.a, a.b, b.a, b.b))
-			matches++;
+	if (IsIntersecting(a.b, a.c, b.b, b.c))
+		return true;
 
-		if (IsIntersecting(a.b, a.c, b.b, b.c))
-			matches++;
-
-		//not hugging, but intersecting
-		if (matches != 0 && a.a != b.a && a.c != b.c)
-			return true;
-	}
+	if (IsIntersecting(a.b, a.c, b.b, b.c))
+		return true;
 
 	return false;
 

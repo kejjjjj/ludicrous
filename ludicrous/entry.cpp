@@ -28,80 +28,86 @@ bool Game::OnUserUpdate(float fElapsedTime)
 
 	Clear(olc::WHITE);
 
-	//std::list<vf2d> points;
+	std::vector<vf2d> points;
 
-	//points.push_back({ 10.f,11.f });
-	//points.push_back({ 10.f,10.f });
+	points.push_back({ 10.f,10.f });
+	points.push_back({ 15.f,15.f });
 
-	//points.push_back({ 11.f,10.f });
-	//points.push_back({ 11.f,11.f });
+	points.push_back({ 10.f,15.f });
+	points.push_back({ 15.f,10.f });
 
-	//points.push_back({ 10.f,10.f });
-	//points.push_back({ 11.f,10.f });
 
-	//points.push_back({ 10.f,11.f });
-	//points.push_back({ 11.f,11.f });
 
-	//brush_t brush(points);
-	
+	polygon_t poly(points);
+
+	poly.DebugDraw();
+	poly.RotateVerticies(CLOCKWISE);
+
 	itris_t tris;
 	static itris_t tris2;
 	vi2d p = GetRealCursorPos();
 
 
 
-	static bool useMouse = false;
+	//static bool useMouse = false;
 
-	//if(useMouse)
-	//	pf = GetRealCursorPos();
+	////if(useMouse)
+	////	pf = GetRealCursorPos();
 
-	//vf2d p = Screen2Grid(pf);
+	////vf2d p = Screen2Grid(pf);
 
 
-	tris.a = { 300, 300};
-	tris.b = { 400, 500};
-	tris.c = { 500, 300};
+	//tris.a = { 300, 300};
+	//tris.b = { 400, 500};
+	//tris.c = { 500, 300};
 
-	//tris2.a = { 14.f, 14.f };
-	//tris2.b = { 18.f, 10.f };
-	//tris2.c = { 18.f, 18.f };
+	////tris2.a = { 14.f, 14.f };
+	////tris2.b = { 18.f, 10.f };
+	////tris2.c = { 18.f, 18.f };
 
-	if (GetMouse(olc::Mouse::MIDDLE).bPressed)
-		useMouse = !useMouse;
-	if (GetMouse(olc::Mouse::RIGHT).bPressed) {
-		useMouse = false;
+	//if (GetMouse(olc::Mouse::MIDDLE).bPressed)
+	//	useMouse = !useMouse;
+	//if (GetMouse(olc::Mouse::RIGHT).bPressed) {
+	//	useMouse = false;
 
-		//above
-		tris2.a = { 300, 300 };
-		tris2.b = { 400, 100 };
-		tris2.c = { 500, 300 };
+	//	////above
+	//	//tris2.a = { 300, 300 };
+	//	//tris2.b = { 400, 100 };
+	//	//tris2.c = { 500, 300 };
 
-		//right side
-		//tris2.a = { 400, 500 };
-		//tris2.b = { 500, 300 };
-		//tris2.c = { 600, 500 };
-	}
+	//	////right side
+	//	//tris2.a = { 400, 500 };
+	//	//tris2.b = { 500, 300 };
+	//	//tris2.c = { 600, 500 };
 
-	//right side
-	/*
-	
-		tris2.a = { 400, 300 };
-		tris2.b = { 500, 500 };
-		tris2.c = { 600, 300 };
-	
-	*/
+	//	//left side
+	//	tris2.a = { 200, 500 };
+	//	tris2.b = { 300, 300 };
+	//	tris2.c = { 400, 500 };
 
-	if (useMouse) {
-		tris2.a = { p.x + 100, p.y + 100 };
-		tris2.b = { p.x + 200, p.y - 100 };
-		tris2.c = { p.x + 300, p.y + 100};
-	}
-	
 
-	DrawTriangle((tris.a), (tris.b), (tris.c), olc::RED);
-	DrawTriangle((tris2.a), (tris2.b), (tris2.c), olc::RED);
+	//}
 
-	DrawCircle((tris.a + tris.b + tris.c) / 3, 10, olc::BLACK);
+	////right side
+	///*
+	//
+	//	tris2.a = { 400, 300 };
+	//	tris2.b = { 500, 500 };
+	//	tris2.c = { 600, 300 };
+	//
+	//*/
+
+	//if (useMouse) {
+	//	tris2.a = { p.x + 100, p.y + 100 };
+	//	tris2.b = { p.x + 200, p.y - 100 };
+	//	tris2.c = { p.x + 300, p.y + 100};
+	//}
+	//
+
+	//DrawTriangle((tris.a), (tris.b), (tris.c), olc::RED);
+	//DrawTriangle((tris2.a), (tris2.b), (tris2.c), olc::RED);
+
+	//DrawCircle((tris.a + tris.b + tris.c) / 3, 10, olc::BLACK);
 
 	//DrawTriangle(tris2.a, tris2.b, tris2.c, olc::RED);
 

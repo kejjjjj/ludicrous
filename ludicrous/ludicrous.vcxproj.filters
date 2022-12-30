@@ -63,6 +63,9 @@
     <ClInclude Include="window.hpp">
       <Filter>Source Files\shared</Filter>
     </ClInclude>
+    <ClInclude Include="polygon.hpp">
+      <Filter>Source Files\game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="olcPixelGameEngine.cpp">
@@ -91,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="window.cpp">
       <Filter>Source Files\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="polygon.cpp">
+      <Filter>Source Files\game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

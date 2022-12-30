@@ -156,6 +156,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="polygon.cpp" />
     <ClCompile Include="r_world.cpp" />
     <ClCompile Include="tris.cpp" />
     <ClCompile Include="vectors.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="g_world.hpp" />
     <ClInclude Include="olcPixelGameEngine.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="polygon.hpp" />
     <ClInclude Include="r_world.hpp" />
     <ClInclude Include="tris.hpp" />
     <ClInclude Include="vectors.hpp" />

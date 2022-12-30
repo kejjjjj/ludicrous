@@ -25,3 +25,21 @@ brush_t::brush_t(const std::list<vf2d> points) : polygon(new plane_t[points.size
 	faces = size;
 
 }
+
+bool brush_t::Triangulate()
+{
+	
+
+	return true;
+}
+
+void brush_t::DebugDraw()
+{
+	const auto brush = this;
+	if (!brush->faces)
+		return;
+
+	for (plane_t* pol = &brush->polygon[0]; pol != &brush->polygon[brush->faces]; pol++) {
+		engine->DrawLine(Grid2Screen(pol->s), Grid2Screen(pol->e), olc::RED);
+	}
+}

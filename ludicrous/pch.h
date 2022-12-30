@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <numeric>
 
 #include "olcPixelGameEngine.h"
 
@@ -25,6 +26,7 @@ using olc::Pixel;
 #include "g_main.hpp"
 #include "entry.hpp"
 
+#include "polygon.hpp"
 #include "col_brush.hpp"
 #include "tris.hpp"
 
