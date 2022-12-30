@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\olc">
+      <UniqueIdentifier>{5f4bba04-f112-4379-a344-40bbd2eef1e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shared">
+      <UniqueIdentifier>{ee61ad34-c8b5-45f1-b4f0-fef0604af0dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\general">
+      <UniqueIdentifier>{984d0eee-afe4-4034-bea9-a2ab779bb8c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game">
+      <UniqueIdentifier>{b92e8336-0ba7-4ac3-8b4b-4bf6d245b333}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\render_world">
+      <UniqueIdentifier>{b7602f0f-b4a7-4edd-b65c-79a73d300317}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\game_world">
+      <UniqueIdentifier>{772e9b47-22a0-4c98-a75e-a25d8887cb06}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="olcPixelGameEngine.h">
+      <Filter>Header Files\olc</Filter>
+    </ClInclude>
+    <ClInclude Include="entry.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="g_world.hpp">
+      <Filter>Source Files\game\game_world</Filter>
+    </ClInclude>
+    <ClInclude Include="col_brush.hpp">
+      <Filter>Source Files\game\game_world</Filter>
+    </ClInclude>
+    <ClInclude Include="vectors.hpp">
+      <Filter>Source Files\shared</Filter>
+    </ClInclude>
+    <ClInclude Include="g_main.hpp">
+      <Filter>Source Files\general</Filter>
+    </ClInclude>
+    <ClInclude Include="r_world.hpp">
+      <Filter>Source Files\game\render_world</Filter>
+    </ClInclude>
+    <ClInclude Include="tris.hpp">
+      <Filter>Source Files\game\game_world</Filter>
+    </ClInclude>
+    <ClInclude Include="window.hpp">
+      <Filter>Source Files\shared</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="olcPixelGameEngine.cpp">
+      <Filter>Header Files\olc</Filter>
+    </ClCompile>
+    <ClCompile Include="entry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="g_world.cpp">
+      <Filter>Source Files\game\game_world</Filter>
+    </ClCompile>
+    <ClCompile Include="col_brush.cpp">
+      <Filter>Source Files\game\game_world</Filter>
+    </ClCompile>
+    <ClCompile Include="vectors.cpp">
+      <Filter>Source Files\shared</Filter>
+    </ClCompile>
+    <ClCompile Include="g_main.cpp">
+      <Filter>Source Files\general</Filter>
+    </ClCompile>
+    <ClCompile Include="r_world.cpp">
+      <Filter>Source Files\game\render_world</Filter>
+    </ClCompile>
+    <ClCompile Include="tris.cpp">
+      <Filter>Source Files\game\game_world</Filter>
+    </ClCompile>
+    <ClCompile Include="window.cpp">
+      <Filter>Source Files\shared</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
