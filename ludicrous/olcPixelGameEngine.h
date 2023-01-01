@@ -1043,7 +1043,10 @@ namespace olc
 		void FillCircle(const olc::vi2d& pos, int32_t radius, Pixel p = olc::WHITE);
 		// Draws a rectangle at (x,y) to (x+w,y+h)
 		void DrawRect(int32_t x, int32_t y, int32_t w, int32_t h, Pixel p = olc::WHITE);
-		void DrawRect(const olc::vi2d& pos, const olc::vi2d& size, Pixel p = olc::WHITE);
+
+		//void DrawRect(const olc::vi2d& pos, const olc::vi2d& size, Pixel p = olc::WHITE);
+		void DrawRect(const olc::vi2d& pos, const olc::vi2d& maxs, Pixel p = olc::WHITE);
+
 		// Fills a rectangle at (x,y) to (x+w,y+h)
 		void FillRect(int32_t x, int32_t y, int32_t w, int32_t h, Pixel p = olc::WHITE);
 		void FillRect(const olc::vi2d& pos, const olc::vi2d& size, Pixel p = olc::WHITE);
@@ -2196,9 +2199,14 @@ namespace olc
 			Draw(x, y, p);
 	}
 
-	void PixelGameEngine::DrawRect(const olc::vi2d& pos, const olc::vi2d& size, Pixel p)
-	{ DrawRect(pos.x, pos.y, size.x, size.y, p); }
+	//void PixelGameEngine::DrawRect(const olc::vi2d& pos, const olc::vi2d& size, Pixel p)
+	//{ DrawRect(pos.x, pos.y, size.x, size.y, p); }
 
+	void  PixelGameEngine::DrawRect(const olc::vi2d& pos, const olc::vi2d& maxs, Pixel p)
+	{
+		auto sub = maxs - pos;
+		DrawRect(pos.x, pos.y, sub.x, sub.y, p);
+	}
 	void PixelGameEngine::DrawRect(int32_t x, int32_t y, int32_t w, int32_t h, Pixel p)
 	{
 		DrawLine(x, y, x + w, y, p);

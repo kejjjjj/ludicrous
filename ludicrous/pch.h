@@ -6,12 +6,19 @@
 #define NOMINMAX
 
 #define PI 3.14159f
+#define RADIAN 6.283185f
+
+#define DEG2RAD(x) (x * PI / 180)
+#define RAD2DEG(x) (x * 180 / PI)
+
+
 
 #include <Windows.h>
 #include <iostream>
 #include <vector>
 #include <string>
 #include <numeric>
+#include <algorithm>
 
 #include "olcPixelGameEngine.h"
 

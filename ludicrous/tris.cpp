@@ -90,10 +90,10 @@ LineDirection GetLineDirection(const vi2d& a, const vi2d& b, const vi2d& c)
 	const int32_t dir = (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
 
 	if (!dir)
-		return COLINEAR;
+		return LineDirection::COLINEAR;
 	else if (dir < 0)
-		return CLOCKWISE;
-	return ANTI_CLOCKWISE;
+		return LineDirection::CLOCKWISE;
+	return LineDirection::ANTI_CLOCKWISE;
 }
 //ab = line1, cd = line2
 bool IsIntersecting(const vi2d& a, const vi2d& b, const vi2d& c, const vi2d& d)

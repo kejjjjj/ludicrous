@@ -28,108 +28,42 @@ bool Game::OnUserUpdate(float fElapsedTime)
 
 	Clear(olc::WHITE);
 
-	std::vector<vf2d> points;
+	static std::vector<vf2d> points;
 
-	points.push_back({ 10.f,10.f });
-	points.push_back({ 15.f,15.f });
+	if (points.empty()) {
 
-	points.push_back({ 10.f,15.f });
-	points.push_back({ 15.f,10.f });
-
-
-
-	polygon_t poly(points);
-
-	poly.DebugDraw();
-	poly.RotateVerticies(CLOCKWISE);
-
-	itris_t tris;
-	static itris_t tris2;
-	vi2d p = GetRealCursorPos();
+		points.push_back({ 2.f,2.f });
+		points.push_back({ -2.f,3.f });
+		points.push_back({ 1.f,1.f });
 
 
+		//points.push_back({ 5.f,15.f });
+		//points.push_back({ 20.f,15.f });
+		//points.push_back({ 10.f,17.f });
+		//points.push_back({ 15.f,17.f });
+		//points.push_back({ 10.f, 30.f });
 
-	//static bool useMouse = false;
+		
 
-	////if(useMouse)
-	////	pf = GetRealCursorPos();
+		auto ye = ConvexHullAlgorithm(points);
+		points.clear();
+		points.insert(points.begin(), ye.begin(), ye.end());
 
-	////vf2d p = Screen2Grid(pf);
-
-
-	//tris.a = { 300, 300};
-	//tris.b = { 400, 500};
-	//tris.c = { 500, 300};
-
-	////tris2.a = { 14.f, 14.f };
-	////tris2.b = { 18.f, 10.f };
-	////tris2.c = { 18.f, 18.f };
-
-	//if (GetMouse(olc::Mouse::MIDDLE).bPressed)
-	//	useMouse = !useMouse;
-	//if (GetMouse(olc::Mouse::RIGHT).bPressed) {
-	//	useMouse = false;
-
-	//	////above
-	//	//tris2.a = { 300, 300 };
-	//	//tris2.b = { 400, 100 };
-	//	//tris2.c = { 500, 300 };
-
-	//	////right side
-	//	//tris2.a = { 400, 500 };
-	//	//tris2.b = { 500, 300 };
-	//	//tris2.c = { 600, 500 };
-
-	//	//left side
-	//	tris2.a = { 200, 500 };
-	//	tris2.b = { 300, 300 };
-	//	tris2.c = { 400, 500 };
-
-
-	//}
-
-	////right side
-	///*
-	//
-	//	tris2.a = { 400, 300 };
-	//	tris2.b = { 500, 500 };
-	//	tris2.c = { 600, 300 };
-	//
-	//*/
-
-	//if (useMouse) {
-	//	tris2.a = { p.x + 100, p.y + 100 };
-	//	tris2.b = { p.x + 200, p.y - 100 };
-	//	tris2.c = { p.x + 300, p.y + 100};
-	//}
-	//
-
-	//DrawTriangle((tris.a), (tris.b), (tris.c), olc::RED);
-	//DrawTriangle((tris2.a), (tris2.b), (tris2.c), olc::RED);
-
-	//DrawCircle((tris.a + tris.b + tris.c) / 3, 10, olc::BLACK);
-
-	//DrawTriangle(tris2.a, tris2.b, tris2.c, olc::RED);
-
-
-	//DrawString({ 100, 200 }, std::format("{},{}", p.x, p.y), olc::BLACK);
-
-	
-	//vi2d a{p}, b{p.x + 500, p.y + 500}, c{100, 500}, d{500,100};
-
-	//DrawLine(a, b, olc::RED);
-	//DrawLine(c, d, olc::GREEN);
-
-
-
-	if (TriangleIntersection(tris, tris2)) {
-		DrawString({ 100, 100 }, "yep", olc::BLACK);
 
 	}
 
-	//if (PointIsWithinTriangle(tris, p)) {
-	//	DrawString({100, 100}, "yep", olc::BLACK);
-	//}
+
+	static polygon_t poly(points);
+
+	poly.DebugDraw();
+	if (GetAsyncKeyState(VK_NUMPAD5) & 1) {
+		//poly.RotateVerticies(CLOCKWISE);
+		auto ye =  ConvexHullAlgorithm(points);
+
+		points.clear();
+		points.insert(points.begin(), ye.begin(), ye.end());
+
+	}
 
 	return true;
 }
