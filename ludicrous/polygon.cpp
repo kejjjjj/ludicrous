@@ -7,7 +7,11 @@ polygon_t::polygon_t(std::vector<vf2d> verts)
 	vertCount = vertices.size();
 
 }
-
+void polygon_t::Initialize(std::vector<vf2d> verts)
+{
+	vertices = verts;
+	vertCount = vertices.size();
+}
 //changes the order of the verticies in the list
 void polygon_t::RotateVerticies(const LineDirection direction)
 {
@@ -49,12 +53,16 @@ void polygon_t::DebugDraw()
 {
 	const auto poly = this;
 
-	auto start = Grid2Screen(poly->vertices[0]);
+	if (poly->vertices.empty())
+		return;
+
+	//auto start = Grid2Screen(poly->vertices[0]);
 	int i = 0;
 	for (i = 0; i < poly->vertCount-1; i++) {
 
 
 		const auto a = Grid2Screen(poly->vertices[i]);
+		const auto start = Grid2Screen(poly->vertices[i+1]);
 
 		engine->DrawLine(start,a, olc::BLACK);
 
@@ -62,64 +70,33 @@ void polygon_t::DebugDraw()
 
 	}
 	const auto a = Grid2Screen(poly->vertices.back());
-	engine->DrawLine(start, a, olc::BLACK);
+	//engine->DrawLine(poly->vertices[poly->vertCount - 2], a, olc::BLACK);
 	engine->DrawString(a, std::to_string(i), olc::BLACK);
 
 
 }
 
-
-void polygon_t::Draw_As_A_Circle()
+std::vector<vi2d>ConvexHullAlgorithm(std::vector<vi2d> iPoints)
 {
-	const auto poly = this;
-	vf2d ac;
-	const auto center = Grid2Screen(std::accumulate(poly->vertices.begin(), poly->vertices.end(), ac) / poly->vertCount);
-	const auto topleft = Grid2Screen(*std::max_element(poly->vertices.cbegin(), poly->vertices.cend(), [](const vf2d& a, const vf2d& b) { return a.x > b.x; }));
-	const auto furthest = Grid2Screen(*std::max_element(poly->vertices.cbegin(), poly->vertices.cend(), [&center](const vf2d& a, const vf2d& b) {return b.x > a.x; }));
+	std::vector<vf2d> _iPoints;
 
-	const int32_t offset = 200;
-	
+	std::for_each(iPoints.begin(), iPoints.end(), [&_iPoints](vi2d p){
+		_iPoints.push_back(Screen2Grid(p)); }); //convert to floats
 
+	auto hull = ConvexHullAlgorithm(_iPoints);
 
-	engine->DrawRect(topleft + vi2d{offset, 0}, furthest, olc::RED);
+	iPoints.clear();
+	iPoints.resize(0);
 
+	std::for_each(hull.begin(), hull.end(), [&iPoints](vi2d p) {
+		iPoints.push_back(Grid2Screen(p)); }); //convert back to ints
 
-}
-int CCW(const vf2d& a, const vf2d& b, const vf2d& c) {
+	return iPoints;
 
-	//return VAngleDifference(b, c) < VAngleDifference(a, c);
-
-	float area = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
-
-	if (area < 0) return -1;
-	if (area > 0) return 1;
-
-	return 0;
-};
-void SortByAngle(std::vector<vf2d>& points, vf2d& ref)
-{
-	std::sort(points.begin(), points.end(), [&ref](vf2d& b, vf2d& c) {
-
-		if (b == ref) return -1;
-		if (c == ref) return 1;
-
-		int ccw = CCW(ref, b, c);
-
-		if (ccw == 0) {
-
-			if (b.x == c.x) {
-				return b.y < c.y ? -1 : 1;
-			}
-			return b.x < c.x ? -1 : 1;
-		}
-
-		return ccw * -1;
-
-		});
 }
 std::vector<vf2d> ConvexHullAlgorithm(std::vector<vf2d> iPoints)
 {
-	std::vector<vf2d> sorted, stack;
+	std::vector<vf2d> sorted, stack, needs_sorting;
 	const auto lowest = std::max_element(iPoints.cbegin(), iPoints.cend(), [](const vf2d& a, const vf2d& b) {return b.y > a.y; });
 	vf2d lowestP = *lowest;
 	const auto pos = std::distance(iPoints.cbegin(), lowest); //index of the lowest Y
@@ -127,52 +104,43 @@ std::vector<vf2d> ConvexHullAlgorithm(std::vector<vf2d> iPoints)
 
 	iPoints.erase(iPoints.begin() + pos, iPoints.begin() + pos + 1); //remove lowest Y
 
-	const auto L_CCW = [](const vf2d& a, const vf2d& b, const vf2d& c) -> bool {
+	//TODO:
+	//ERASE ELEMENTS WITH SAME X || Y COORDINATE AS THE REFERENCE, BECAUSE THEN THEY CAN BE SORTED PROPERLY!!!!
 
-		//return VAngleDifference(b, c) < VAngleDifference(a, c);
+	int32_t ipos = 0;
+	for (const auto& i : iPoints) {
+		if (i.y == lowestP.y && i.x > lowestP.x) { //same horizontal level
+			needs_sorting.push_back(i);
+			if (i != iPoints.back())
+				iPoints.erase(iPoints.begin() + ipos, iPoints.begin() + ipos + 1);
+			else
+				iPoints.pop_back();
 
-		float area = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+		} /*else if (i.x == lowestP.x) { //same vertical level
+			needs_sorting.push_back(i);
+			iPoints.erase(iPoints.begin() + ipos, iPoints.begin() + ipos + 1);
+		}*/
 
-		if (area < 0) return -1;
-		if (area > 0) return 1;
+		ipos++;
+	}
 
-		return 0;
-	};
+	const auto L_CCW = [](const vf2d& prev, const vf2d& next, const vf2d& ref) -> bool {
+		return GetLineDirection(prev, next, ref) == LineDirection::ANTI_CLOCKWISE;};
 
 	//sort by angle
 	std::sort(iPoints.begin(), iPoints.end(), [&lowestP, &L_CCW](const vf2d& a, const vf2d& b) {
 		return VAngleDifference(b, lowestP) > VAngleDifference(a, lowestP); });
+	
+	//sort the horizontal similarities
 
-	//std::sort(iPoints.begin(), iPoints.end(), [&lowestP](vf2d& b, vf2d& c) {
+	std::sort(needs_sorting.begin(), needs_sorting.end(), [&lowestP, &L_CCW](const vf2d& a, const vf2d& b) { return a.x < b.x; });
 
-	//	if (b == lowestP) return -1;
-	//	if (c == lowestP) return 1;
 
-	//	int ccw = CCW(lowestP, b, c);
-
-	//	if (ccw == 0) {
-
-	//		if (b.x == c.x) {
-	//			return b.y < c.y;
-	//		}
-	//		return b.x < c.x;
-	//	}
-
-	//	return ccw * -1;
-
-	//	});
-
-	sorted.clear();
 	sorted.push_back(lowestP); //add lowest Y as the first one
-	sorted.insert(sorted.begin()+1, iPoints.begin(), iPoints.end());
+	sorted.insert(sorted.end(), needs_sorting.begin(), needs_sorting.end()); //add the horizontally sorted elements at the front
+	sorted.insert(sorted.end(), iPoints.begin(), iPoints.end()); //add the rest
 
-
-	//const vf2d first_pos = { sorted[1].x, lowestP.y };
-
-
-	//stack.push_back(sorted[1]);
-
-	const int32_t max_size = sorted.size();
+	const size_t max_size = sorted.size();
 
 	std::cout << '\n';
 
@@ -186,28 +154,60 @@ std::vector<vf2d> ConvexHullAlgorithm(std::vector<vf2d> iPoints)
 		return;
 	};
 
-	push_front(&stack, lowestP);
-	push_front(&stack, sorted[1]);
+	stack.push_back(sorted[1]);
+	stack.push_back(lowestP);
+	
+
+	const auto L_IndexFor_vf2d = [&sorted](const vf2d& pos) -> int32_t {
+		
+		int i = 0;
+		for (const auto& s : sorted) {
+			if (s == pos)
+				return i;
+
+			i++;
+		}
+		return -1;
+	};
 
 	for(int i = 2; i < max_size; i++){
-		
+
 		auto& next = sorted[i];
 		auto p = pop_front(&stack);
 
-		while(!stack.empty() && L_CCW(stack.front(), p, next) <= 0) {
+
+
+		while (stack.size() > 1 && !L_CCW(stack.front(), p, next)) {
+			std::cout << std::format("{} is CW to {}\n", L_IndexFor_vf2d(next), L_IndexFor_vf2d(p));
+
 			p = pop_front(&stack);
 		}
-
+		
+		std::cout << std::format("{} is CCW to {}\n", L_IndexFor_vf2d(next), L_IndexFor_vf2d(p));
 		push_front(&stack, p);
 		push_front(&stack, sorted[i]);
-
-		
 	
 	}
 	auto p = pop_front(&stack);
 
-	if (L_CCW(stack.front(), p, lowestP) > 0)
+	if (L_CCW(stack.front(), p, lowestP)) {
+		std::cout << std::format("{} is CCW to {}\n", L_IndexFor_vf2d(lowestP), L_IndexFor_vf2d(p));
 		stack.push_back(p);
+	}else
+		std::cout << std::format("{} is CW to {}\n", L_IndexFor_vf2d(lowestP), L_IndexFor_vf2d(p));
+
+	std::sort(stack.begin(), stack.end(), [&L_IndexFor_vf2d](const vf2d& a, const vf2d& b) {
+		return L_IndexFor_vf2d(b) > L_IndexFor_vf2d(a); });
+
+	std::cout << '\n';
+	for (auto& i : stack) {
+
+		if(i == stack.back())
+			std::cout << std::format("[{}]\n", L_IndexFor_vf2d(i));
+		else
+			std::cout << std::format("[{}] -> ", L_IndexFor_vf2d(i));
+
+	}
 
 	return sorted;
 

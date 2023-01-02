@@ -24,14 +24,13 @@ struct plane_t
 class brush_t
 {
 public:
-	brush_t(const std::list<vf2d> points);
-
-	~brush_t(){
-		delete[] polygon;
-	};
+	brush_t(const std::vector<vf2d> points);
+	brush_t(){};
+	~brush_t() = default;
+	void Initialize(const std::vector<vf2d> points);
 	bool Triangulate();
 	void DebugDraw();
-	plane_t* polygon;
+	polygon_t polygon;
 	uint8_t faces = 0;
 
 };

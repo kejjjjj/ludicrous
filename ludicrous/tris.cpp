@@ -122,3 +122,14 @@ bool IsIntersecting(const vi2d& a, const vi2d& b, const vi2d& c, const vi2d& d)
 
 	return false;
 }
+
+bool IsBelowLine(const vi2d& lineA, const vi2d& lineB, const vi2d& p)
+{
+
+	if (p.x < lineA.min(lineB).x || p.x > lineA.max(lineB).x)
+		return false;
+
+	const vi2d third = (lineB.max(lineA).y == lineB.y) == true ? vi2d{ lineA.x, lineB.y } : vi2d{lineB.x, lineA.y};
+
+	return p.y > third.y || PointIsWithinTriangle({ lineA, lineB, third }, p);
+}

@@ -23,47 +23,52 @@ bool Game::OnUserCreate()
 }
 bool Game::OnUserUpdate(float fElapsedTime)
 {
-
-	wnd.hwnd = FindWindowA(NULL, "EPICNESS");
+	if (!wnd.hwnd) {
+		wnd.hwnd = FindWindowA(NULL, "EPICNESS");
+		return true;
+	}
 
 	Clear(olc::WHITE);
 
 	static std::vector<vf2d> points;
-
+	static brush_t brush;
 	if (points.empty()) {
 
-		points.push_back({ 2.f,2.f });
-		points.push_back({ -2.f,3.f });
-		points.push_back({ 1.f,1.f });
 
+		points.push_back({ 15.f,15.f });
+		points.push_back({ 25.f,15.f });
 
-		//points.push_back({ 5.f,15.f });
-		//points.push_back({ 20.f,15.f });
-		//points.push_back({ 10.f,17.f });
-		//points.push_back({ 15.f,17.f });
-		//points.push_back({ 10.f, 30.f });
+		points.push_back({ 15.f,20.f });
+		points.push_back({ 25.f,20.f });
+
+		points.push_back({ 15.f,25.f });
+		points.push_back({ 20.f,25.f });
+		points.push_back({ 25.f,25.f });
+
+		brush.Initialize(points);
+	}
+
+	//sort vertices
+	if (GetAsyncKeyState(VK_NUMPAD5)&1) {
+
+		auto verts = &brush.polygon.vertices;
+		auto ye = ConvexHullAlgorithm(points);
+		verts->clear();
+		verts->insert(verts->begin(), ye.begin(), ye.end());
 
 		
 
-		auto ye = ConvexHullAlgorithm(points);
-		points.clear();
-		points.insert(points.begin(), ye.begin(), ye.end());
-
+		//brush.Triangulate();
 
 	}
-
-
-	static polygon_t poly(points);
-
-	poly.DebugDraw();
-	if (GetAsyncKeyState(VK_NUMPAD5) & 1) {
-		//poly.RotateVerticies(CLOCKWISE);
-		auto ye =  ConvexHullAlgorithm(points);
-
-		points.clear();
-		points.insert(points.begin(), ye.begin(), ye.end());
-
+	else if (GetAsyncKeyState(VK_NUMPAD6) & 1) {
+	
+		brush.Triangulate();
 	}
+
+	
+	brush.polygon.DebugDraw();
+	
 
 	return true;
 }
