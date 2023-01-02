@@ -11,38 +11,66 @@ void polygon_t::Initialize(std::vector<vf2d> verts)
 {
 	vertices = verts;
 	vertCount = vertices.size();
+
+	vertex_t vert;
+
+	//first vertex gets angle from first and last
+
+	float m2 = VLineSlope(vertices[0], vertices[1]);
+	float m1 = VLineSlope(vertices[1], vertices[2]);
+
+	float lengthA = vertices[0].dist(vertices[1]);
+	float lengthB = vertices[1].dist(vertices[2]);
+	float lengthC = vertices[0].dist(vertices[2]);
+
+	std::cout << std::format("0 -> 1 = {}\n1 -> 2 = {}\n0 -> 2 = {}\n", lengthA, lengthB, lengthC);
+
+
+	float abtl = atan(	abs((m2 - m1) / (1.f + m1 * m2))	) * 180.f / PI;
+
+	vert.interiorAngles = abtl;
+	vert.exteriorAngles = 180.f - vert.interiorAngles;
+	vert.isConvex == vert.interiorAngles < 180;
+	vertex.push_back(vert);
+
+	//for (int i = 2; i < vertices.size()-1; i+=2) {
+
+
+
+	//}
+
 }
 //changes the order of the verticies in the list
 void polygon_t::RotateVerticies(const LineDirection direction)
 {
-	const auto poly = this;
-	vf2d ac;
-	const auto center = Grid2Screen(std::accumulate(poly->vertices.begin(), poly->vertices.end(), ac) / poly->vertCount);
-	const auto topleft = std::max_element(poly->vertices.cbegin(), poly->vertices.cend(), [](const vf2d& a, const vf2d& b) { return a.x > b.x; });
-	const auto furthest = std::max_element(poly->vertices.cbegin(), poly->vertices.cend(), [&center](const vf2d& a, const vf2d& b) {return b.x > a.x; });
+	//const auto poly = this;
+	//vf2d ac;
+	//const auto center = Grid2Screen(std::accumulate(poly->vertices.begin(), poly->vertices.end(), ac) / poly->vertCount);
+	//const auto topleft = std::max_element(poly->vertices.cbegin(), poly->vertices.cend(), [](const vf2d& a, const vf2d& b) { return a.x > b.x; });
+	//const auto furthest = std::max_element(poly->vertices.cbegin(), poly->vertices.cend(), [&center](const vf2d& a, const vf2d& b) {return b.x > a.x; });
 
-	std::vector<vf2d> new_verts, needs_sorting = poly->vertices;
+	//std::vector<vf2d> new_verts, needs_sorting = poly->vertices;
 
-	const int32_t radius = (int32_t)furthest->dist(center) / poly->vertCount;
-	const float fRadius = (float)radius / gGlobals.gridSize;
+	//const int32_t radius = (int32_t)furthest->dist(center) / poly->vertCount;
+	//const float fRadius = (float)radius / gGlobals.gridSize;
 
-	//add to the new verts list
-	new_verts.push_back(*topleft);
-	
-	//erase the closest element
-	auto pos = std::distance(poly->vertices.cbegin(), topleft);
-	needs_sorting.erase(needs_sorting.cbegin()+pos, needs_sorting.cbegin()+pos+1);
+	////add to the new verts list
+	//new_verts.push_back(*topleft);
+	//
+	////erase the closest element
+	//auto pos = std::distance(poly->vertices.cbegin(), topleft);
+	//needs_sorting.erase(needs_sorting.cbegin()+pos, needs_sorting.cbegin()+pos+1);
 
 
-	engine->DrawString(Grid2Screen(*topleft), std::format("furthest: {}", radius), olc::BLACK);
-	engine->DrawCircle(center, radius, olc::RED);
+	//engine->DrawString(Grid2Screen(*topleft), std::format("furthest: {}", radius), olc::BLACK);
+	//engine->DrawCircle(center, radius, olc::RED);
 
-	while (needs_sorting.empty() == false) {
+	//while (needs_sorting.empty() == false) {
 
-	}
+	//}
 
-	poly->vertices.clear();
-	poly->vertices.insert(poly->vertices.begin(), new_verts.begin(), new_verts.end());
+	//poly->vertices.clear();
+	//poly->vertices.insert(poly->vertices.begin(), new_verts.begin(), new_verts.end());
 
 
 
@@ -70,7 +98,8 @@ void polygon_t::DebugDraw()
 
 	}
 	const auto a = Grid2Screen(poly->vertices.back());
-	//engine->DrawLine(poly->vertices[poly->vertCount - 2], a, olc::BLACK);
+	const auto b = Grid2Screen(poly->vertices.front());
+	engine->DrawLine(b, a, olc::BLACK);
 	engine->DrawString(a, std::to_string(i), olc::BLACK);
 
 
@@ -97,9 +126,14 @@ std::vector<vi2d>ConvexHullAlgorithm(std::vector<vi2d> iPoints)
 std::vector<vf2d> ConvexHullAlgorithm(std::vector<vf2d> iPoints)
 {
 	std::vector<vf2d> sorted, stack, needs_sorting;
-	const auto lowest = std::max_element(iPoints.cbegin(), iPoints.cend(), [](const vf2d& a, const vf2d& b) {return b.y > a.y; });
+	const auto lowest = BottomMostLeft(iPoints);
+	//const auto lowest = std::max_element(iPoints.cbegin(), iPoints.cend(), [](const vf2d& a, const vf2d& b) {
+	//	if (b.x < a.x)
+	//		return b > a;
+
+	//	return b.y > a.y; });
 	vf2d lowestP = *lowest;
-	const auto pos = std::distance(iPoints.cbegin(), lowest); //index of the lowest Y
+	const auto pos = std::distance(iPoints.begin(), lowest); //index of the lowest Y
 
 
 	iPoints.erase(iPoints.begin() + pos, iPoints.begin() + pos + 1); //remove lowest Y
@@ -211,4 +245,25 @@ std::vector<vf2d> ConvexHullAlgorithm(std::vector<vf2d> iPoints)
 
 	return sorted;
 
+}
+
+std::vector<vf2d>::iterator BottomMostLeft(std::vector<vf2d>& points)
+{
+
+	auto begin = points.begin();
+	auto end = points.end();
+	std::vector<vf2d>::iterator min = points.begin();
+
+	for (auto it = points.begin(); it != end; it++) {
+
+		if (it->y >= min->y) {
+
+			if (it->y > min->y)
+				min = it;
+			else if (it->x < min->x)
+				min = it;
+		}
+	}
+
+	return min;
 }

@@ -21,42 +21,9 @@ bool brush_t::Triangulate()
 	if (this->faces == 0)
 		return false;
 
-	const auto poly = &this->polygon;
-	std::vector<vi2d> b_hull, b_rest;
-
-
-	//Let left_most and right_most be the left-most and right-most points.
-	const auto left_most = Grid2Screen(*std::max_element(poly->vertices.cbegin(), poly->vertices.cend(), [](const vf2d& a, const vf2d& b) { return a.x > b.x; }));
-	const auto right_most = Grid2Screen(*std::max_element(poly->vertices.cbegin(), poly->vertices.cend(), [](const vf2d& a, const vf2d& b) { return a.x < b.x; }));
-
-	// Find a lower convex hull S of the points. S contains p1, p2 and all the convex hull points that are below the line p1p2. 
-	std::for_each(poly->vertices.cbegin(), poly->vertices.cend(), [&left_most, &right_most, &b_hull](const vf2d& i) {
-
-		const auto p = Grid2Screen(i);
-		if (IsBelowLine(left_most, right_most, p)) {
-			b_hull.push_back(p);
-		}
-	});
-	std::vector<vi2d> copy = b_hull;
-	b_hull.clear();
-	b_hull = ConvexHullAlgorithm(copy);
-	copy.clear();
-
-	//add the remaining points to the b_rest container
-	std::for_each(poly->vertices.cbegin(), poly->vertices.cend(), [&b_rest, &b_hull](const vf2d& p) {
-
-		const auto fixed = Grid2Screen(p);
-		if (std::find(b_hull.cbegin(), b_hull.cend(), fixed) == b_hull.cend()) {
-			b_rest.push_back(fixed);
-		}
-	});
-
-
-	//Now sort the remaining points (those not in S (b_rest)) by their x-coordinate. 
-	std::sort(b_rest.begin(), b_rest.end(), [](const vi2d& a, const vi2d& b) { return a.x < b.x; });
-
-
-//	(std::sort(b_hull.cbegin(), b_hull.cend(), [](const vf2d& a, const vf2d& b) { return a.x > b.x; }));
+	
+	//Step 1: Compute the interior angles on each vertex of P. If the interior angle on
+	//a vertex is less than 180°, the vertex is convex; Otherwise, reflex.
 
 
 

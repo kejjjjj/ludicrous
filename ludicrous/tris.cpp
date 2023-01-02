@@ -133,3 +133,8 @@ bool IsBelowLine(const vi2d& lineA, const vi2d& lineB, const vi2d& p)
 
 	return p.y > third.y || PointIsWithinTriangle({ lineA, lineB, third }, p);
 }
+vi2d uh(const vi2d& lineA, const vi2d& lineB)
+{
+	return (lineB.max(lineA).y == lineB.y) == true ? vi2d{ lineA.x, lineB.y } : vi2d{ lineB.x, lineA.y };
+
+}

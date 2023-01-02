@@ -17,3 +17,11 @@ float VNormalize(vf2d& out) {
 
 	return length;
 }
+float VLineSlope(const vf2d& s, const vf2d& e)
+{
+	return (e.y - e.x) / (s.y - s.x);
+}
+vf2d VLinearCombination(const vf2d& a, const vf2d& b, const float scalarX, const float scalarY)
+{
+	return a * scalarX + b * scalarY;
+}

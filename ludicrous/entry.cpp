@@ -33,17 +33,30 @@ bool Game::OnUserUpdate(float fElapsedTime)
 	static std::vector<vf2d> points;
 	static brush_t brush;
 	if (points.empty()) {
+		
+		//points.push_back({ 15.f,15.f });
+		//points.push_back({ 15.f,20.f });
+		//points.push_back({ 20.f,15.f });
 
 
-		points.push_back({ 15.f,15.f });
-		points.push_back({ 25.f,15.f });
 
-		points.push_back({ 15.f,20.f });
-		points.push_back({ 25.f,20.f });
+		//points.push_back({ 15.f,20.f });
+		points.push_back({ 15, 20 });
+		points.push_back({ 25, 10 });
+		points.push_back({ 30, 20 });
 
-		points.push_back({ 15.f,25.f });
-		points.push_back({ 20.f,25.f });
-		points.push_back({ 25.f,25.f });
+		//points.push_back({ 23.f,14.f });
+		//points.push_back({ 20.f,10.f });
+		//points.push_back({ 15.f,15.f });
+		
+		
+		
+
+		
+		
+		
+
+
 
 		brush.Initialize(points);
 	}

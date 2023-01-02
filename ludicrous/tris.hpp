@@ -35,4 +35,6 @@ LineDirection GetLineDirection(const vi2d& a, const vi2d& b, const vi2d& c);
 bool OnLine(const vi2d& lineA, const vi2d& lineB, const vi2d& p);
 bool IsIntersecting(const vi2d& a, const vi2d& b, const vi2d& c, const vi2d& d);
 bool IsBelowLine(const vi2d& lineA, const vi2d& lineB, const vi2d& p);
+vi2d uh(const vi2d& lineA, const vi2d& lineB);
+
 #endif
